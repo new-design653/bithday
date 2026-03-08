@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Surprise For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ffccd5;
+            --dark: #590d22;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--secondary);
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .section {
+            display: none;
+            min-height: 100vh;
+            width: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .active { display: flex; }
+
+        /* Countdown Style */
+        #timer {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Letter Style */
+        .letter-container {
+            background: #fff;
+            padding: 40px;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        #typewriter {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            min-height: 200px;
+        }
+
+        /* Gift Box */
+        .box {
+            width: 150px;
+            height: 150px;
+            background: var(--primary);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .box:hover { transform: scale(1.1); }
+        .box::before { /* Ribbon */
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 100%;
+            background: white;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Balloons */
+        .balloon-area {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .balloon {
+            width: 60px;
+            height: 80px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        /* Cake */
+        .cake {
+            font-size: 5rem;
+            cursor: pointer;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="section1" class="section active">
+        <h2>Your surprise will come in...just a little more wait</h2>
+        <div id="timer">3</div>
+    </div>
+
+    <div id="section2" class="section">
+        <div class="letter-container">
+            <div id="typewriter"></div>
+            <button id="nextToGift" style="display:none">Open your Gift(but don't forget the actual gift is me)</button>
+        </div>
+    </div>
+
+    <div id="section3" class="section">
+        <h2>Tap to open your gift..something special is waiting for you!</h2>
+        <div class="box" onclick="openBox()"></div>
+        <div id="giftMessage" style="display:none; margin-top: 20px;">
+            <p><strong>"You are the best thing that ever happened to me.Seni çok seviyorum..means i love u sooo muchhhh!"</strong></p>
+            <button onclick="nextSection(4)">Wait, there's moreeee!</button>
+        </div>
+    </div>
+
+    <div id="section4" class="section">
+        <h2>Pop the balloons to find the way!</h2>
+        <div class="balloon-area">
+            <div class="balloon" onclick="pop(this)">1</div>
+            <div class="balloon" onclick="pop(this)">2</div>
+            <div class="balloon" onclick="pop(this, true)">3</div>
+            <div class="balloon" onclick="pop(this)">4</div>
+        </div>
+    </div>
+
+    <div id="section5" class="section">
+        <h2>Make a wish and blow!</h2>
+        <div class="cake" onclick="makeWish()">🎂</div>
+        <p id="finalMsg" style="display:none">Your wish has been sent to ALLAH...may you every wish will come true! ✨<br>HAPPY BIRTHDAY, My other side!</p>
+    </div>
+
+    <script>
+        // --- 1. Countdown Logic ---
+        let count = 3;
+        const timerDisplay = document.getElementById('timer');
+        const countdown = setInterval(() => {
+            count--;
+            timerDisplay.innerText = count;
+            if (count === 0) {
+                clearInterval(countdown);
+                nextSection(2);
+                startTypewriter();
+            }
+        }, 1000);
+
+        // --- 2. Typewriter Letter ---
+        const text = "To the love of my life...i cannot tell you how much you mean to me...i love u more than u could imagine to be loved by someone in this whole world..may this day will be the bestest day ever of your life...i am alwayss with you..i wish you will be a successful man one day..the percious one in my life...my beautiful one..i cannot live a single day without you...i hope our bond will never break...you deserve alott but this is a small effort from your wife to make u smile...your smile is more than anything to me..may allah give u everything you deserve.....wishing u a happiest birthday SWEETHEART";
+        let i = 0;
+        function startTypewriter() {
+            if (i < text.length) {
+                document.getElementById("typewriter").innerHTML += text.charAt(i);
+                i++;
+                setTimeout(startTypewriter, 50);
+            } else {
+                document.getElementById('nextToGift').style.display = 'block';
+            }
+        }
+        document.getElementById('nextToGift').onclick = () => nextSection(3);
+
+        // --- 3. Gift Box ---
+        function openBox() {
+            document.querySelector('.box').style.transform = "translateY(-50px) rotate(10deg)";
+            document.getElementById('giftMessage').style.display = 'block';
+        }
+
+        // --- 4. Balloon Popping ---
+        let poppedCount = 0;
+        function pop(el, isKey = false) {
+            el.style.visibility = 'hidden';
+            if(isKey) {
+                alert("yayyyy...you found the key!");
+                nextSection(5);
+            }
+        }
+
+        // --- 5. Cake ---
+        function makeWish() {
+            alert("✨ Wish captured! ✨");
+            document.getElementById('finalMsg').style.display = 'block';
+            document.querySelector('.cake').innerText = "🕯️"; 
+        }
+
+        // Helper to switch sections
+        function nextSection(num) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section' + num).classList.add('active');
+        }
+    </script>
+</body>
+</html>
